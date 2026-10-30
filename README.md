@@ -59,3 +59,15 @@ No automated deployed E2E verification yet. Tests cover validation, session inte
 - Overview derives totals from at most 200 loaded orders; completed order value is not payment settlement or accounting revenue. Dates use Europe/Berlin.
 - Order search, status filtering, selection and actual authenticated status updates are connected to existing endpoints. Menu/category search is read-only; restaurant information is read-only. No SMS, menu mutation or settings mutation is claimed.
 - Design references fetched directly through Stitch MCP: project `13359882500035204561`, overview `09e788c4531f4ced8f4c842aeb60f774`, orders `c7b4f1b31f4d40ce9688fd63cbea17d3`, menu `564a7c7fd85640778746c7f7eb1cddac`, login `37767919fc3b467ea2a84360d689ee32`.
+
+## Admin management (ADMIN-UI-02)
+
+Implemented catalog editing (name, description, category, HTTPS image URL, integer-cent prices, optional discount, availability), item creation, category creation, restaurant contact/preparation settings. Native modal dialogs preserve focus and trap keyboard interaction. Existing authenticated server routes enforce permissions before DB access; Zod validates all mutations. No image upload service: supply an HTTPS image URL. No hard delete endpoint.
+
+Run `npm run db:migrate` with a non-production DATABASE_URL already set to apply additive migration `db/002_admin.sql`. Then run the Vercel API environment to exercise live persistence. Migration has not been applied to production by this UI task.
+
+API additions: GET/POST/PUT `admin-menu`; GET/POST `admin-categories`; GET/PUT `admin-settings`; public GET `restaurant`. All admin endpoints require session. Menu price edits affect future orders; stored order snapshots remain unchanged. Newly used categories appear on the storefront; public header reads restaurant name/address after reload. Preparation duration is informational only; hours and ordering-window enforcement are not implemented.
+
+DEV `/admin?preview=1` can edit synthetic data in component memory, with explicit preview labels and sample-save buttons. No API mutation is made in preview. Navigating away/reloading resets local sample changes. Production still requires login.
+
+No settings for SMS, online payment, tax accounting, ingredient options, allergens, opening hours, category reordering/deletion or file upload are claimed. Last-write-wins applies to concurrent admin edits; audit/version history remains future work.

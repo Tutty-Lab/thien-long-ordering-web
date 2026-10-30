@@ -1,0 +1,15 @@
+
+> thien-long-ordering-web@0.1.0 build
+> tsc --noEmit && tsc --noEmit -p tsconfig.server.json && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 2132 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.54 kB │ gzip:   0.37 kB
+dist/assets/AdminPortal-BA_RERu9.css   22.33 kB │ gzip:   4.89 kB
+dist/assets/index-CRIsTq7v.css         22.96 kB │ gzip:   5.46 kB
+dist/assets/AdminPortal-D0kAXP4W.js   121.17 kB │ gzip:  36.32 kB
+dist/assets/index-F1eFW69l.js         429.56 kB │ gzip: 140.52 kB
+✓ built in 6.16s

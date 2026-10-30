@@ -4,6 +4,7 @@ type VercelResponse=ServerResponse & {status(code:number):VercelResponse;json(bo
 import { neon } from '@neondatabase/serverless';
 import { createHash,randomUUID } from 'node:crypto';
 import { z } from 'zod';
+import { menuInput,categoryInput,restaurantInput } from '../server/admin-contracts.js';
 import { orderInput } from '../server/contracts.js';
 import { equal,session,valid } from '../server/security.js';
 export default async function handler(req:VercelRequest,res:VercelResponse){
@@ -14,7 +15,7 @@ export default async function handler(req:VercelRequest,res:VercelResponse){
  try{
   if(req.method!=='GET'&&req.headers.origin&&req.headers.origin!==`https://${req.headers.host}`&&req.headers.origin!==`http://${req.headers.host}`)return res.status(403).json({error:'Origin rejected'});
   if(action==='session'&&req.method==='GET')return res.status(200).json({authenticated:authorized()});
-  if(action==='admin-orders'&&!authorized())return res.status(401).json({error:'Authentication required'});
+  if(action.startsWith('admin-')&&!authorized())return res.status(401).json({error:'Authentication required'});
   const url=process.env.DATABASE_URL;if(!url)return res.status(503).json({error:'Database unavailable'});
   const sql=neon(url);
   const limit=async(bucket:string,max:number)=>{const key=createHash('sha256').update(bucket+':'+String(req.headers['x-real-ip']||'unknown')).digest('hex');const rows=await sql`INSERT INTO rate_limits(key,hits,expires_at) VALUES(${key},1,now()+interval '5 minutes') ON CONFLICT(key) DO UPDATE SET hits=CASE WHEN rate_limits.expires_at<now() THEN 1 ELSE rate_limits.hits+1 END,expires_at=CASE WHEN rate_limits.expires_at<now() THEN now()+interval '5 minutes' ELSE rate_limits.expires_at END RETURNING hits`;return Number(rows[0].hits)<=max};
@@ -26,6 +27,28 @@ export default async function handler(req:VercelRequest,res:VercelResponse){
   }
   if(action==='logout'&&req.method==='POST'){res.setHeader('Set-Cookie','tl_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0');return res.json({ok:true})}
   if(action==='menu'&&req.method==='GET'){const rows=await sql`SELECT * FROM menu_items WHERE available=true ORDER BY id`;return res.json(rows.map(x=>({id:x.id,name:x.name,category:x.category,description:x.description,image:x.image,price:Number(x.price_cents)/100,sale:x.sale_cents===null?null:Number(x.sale_cents)/100})))}
+  if(action==='restaurant'&&req.method==='GET')return res.json((await sql`SELECT name,address,phone,preparation_minutes FROM restaurant_settings WHERE id=1`)[0]);
+  if(action==='admin-menu'){
+   if(req.method==='GET')return res.json(await sql`SELECT * FROM menu_items ORDER BY category,id`);
+   if(req.method==='POST'||req.method==='PUT'){
+    const parsed=menuInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid menu item'});
+    const x=parsed.data;
+    if(req.method==='POST'){
+     const rows=await sql`INSERT INTO menu_items(id,name,category,description,image,price_cents,sale_cents,available) SELECT ${x.id},${x.name},${x.category},${x.description},${x.image},${x.price_cents},${x.sale_cents},${x.available} WHERE EXISTS(SELECT 1 FROM menu_categories WHERE name=${x.category}) ON CONFLICT(id) DO NOTHING RETURNING id`;
+     return res.status(rows.length?201:409).json({ok:!!rows.length});
+    }
+    const rows=await sql`UPDATE menu_items SET name=${x.name},category=${x.category},description=${x.description},image=${x.image},price_cents=${x.price_cents},sale_cents=${x.sale_cents},available=${x.available} WHERE id=${x.id} AND EXISTS(SELECT 1 FROM menu_categories WHERE name=${x.category}) RETURNING id`;
+    return res.status(rows.length?200:404).json({ok:!!rows.length});
+   }
+  }
+  if(action==='admin-categories'){
+   if(req.method==='GET')return res.json(await sql`SELECT name FROM menu_categories ORDER BY name`);
+   if(req.method==='POST'){const parsed=categoryInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid category'});const rows=await sql`INSERT INTO menu_categories(name) VALUES(${parsed.data.name}) ON CONFLICT DO NOTHING RETURNING name`;return res.status(rows.length?201:409).json({ok:!!rows.length})}
+  }
+  if(action==='admin-settings'){
+   if(req.method==='GET')return res.json((await sql`SELECT name,address,phone,preparation_minutes FROM restaurant_settings WHERE id=1`)[0]);
+   if(req.method==='PUT'){const parsed=restaurantInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid restaurant settings'});const x=parsed.data;const rows=await sql`UPDATE restaurant_settings SET name=${x.name},address=${x.address},phone=${x.phone},preparation_minutes=${x.preparation_minutes} WHERE id=1 RETURNING id`;return res.status(rows.length?200:404).json({ok:!!rows.length})}
+  }
   if(action==='orders'&&req.method==='POST'){
    const parsed=orderInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid order'});
    const input=parsed.data,hash=createHash('sha256').update(JSON.stringify(input)).digest('hex');

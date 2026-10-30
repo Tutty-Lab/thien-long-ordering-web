@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {menuInput,restaurantInput,categoryInput} from '../server/admin-contracts.js';
+const item={id:'one',name:'Phở bò',category:'Món chính',description:'',image:'https://example.com/pho.jpg',price_cents:1300,sale_cents:1150,available:true};
+test('menu contract protects price, image URL and availability types',()=>{assert.ok(menuInput.safeParse(item).success);for(const patch of [{price_cents:1.5},{price_cents:-1},{sale_cents:1400},{sale_cents:0},{image:'javascript:alert(1)'},{image:'http://example.com/a.jpg'},{available:'true'}])assert.equal(menuInput.safeParse({...item,...patch}).success,false);assert.ok(menuInput.safeParse({...item,sale_cents:null,image:''}).success)});
+test('category and restaurant inputs enforce meaningful limits',()=>{assert.equal(categoryInput.safeParse({name:'   '}).success,false);assert.equal(categoryInput.safeParse({name:'a'.repeat(81)}).success,false);const data={name:'Thiên Long',address:'Olgastraße 5',phone:'',preparation_minutes:20};assert.ok(restaurantInput.safeParse(data).success);assert.equal(restaurantInput.safeParse({...data,preparation_minutes:0}).success,false);assert.equal(restaurantInput.safeParse({...data,preparation_minutes:181}).success,false)});
