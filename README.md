@@ -71,3 +71,9 @@ API additions: GET/POST/PUT `admin-menu`; GET/POST `admin-categories`; GET/PUT `
 DEV `/admin?preview=1` can edit synthetic data in component memory, with explicit preview labels and sample-save buttons. No API mutation is made in preview. Navigating away/reloading resets local sample changes. Production still requires login.
 
 No settings for SMS, online payment, tax accounting, ingredient options, allergens, opening hours, category reordering/deletion or file upload are claimed. Last-write-wins applies to concurrent admin edits; audit/version history remains future work.
+
+## Production admin update (ADMIN-PROD-01)
+
+Supersedes local preview instructions above: admin preview disabled, including in development; `/admin?preview=1` requires authentication. Production admin uses real API data. Removed workspace header, location tile, customer-site link and profile footer. Logout resides at sidebar bottom (fifth bottom-nav action on mobile).
+
+Migration 002 applied through authenticated Vercel Neon Query editor on 2026-10-30 using individually verified idempotent statements. Readback: 5 categories, 1 restaurant settings record, 6 menu items. SQL editor returned to read-only mode. No menu/order rows overwritten. Actual authenticated admin save/readback still needs session verification; migration/read-only API smoke checks do not prove that workflow.
