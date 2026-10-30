@@ -50,3 +50,12 @@ Framework Vite; repository root; build `npm run build`; output `dist`. `vercel.j
 ## Limits
 
 No automated deployed E2E verification yet. Tests cover validation, session integrity, unauthenticated access, cross-origin rejection and fail-closed missing DB. These do not prove a deployed order round trip. Menu preview falls back to local samples when API is unavailable; checkout stays disabled. Admin currently manages order status only. No menu editor, payments, automatic refresh, session revocation store or retention job. Rate-limit rows require eventual cleanup; missing client IP shares a conservative bucket. Customer data needs retention/access policies before public launch.
+
+## Admin UI local (ADMIN-UI-01)
+
+- `/admin`: actual login; requires the Vercel API environment for authentication and orders.
+- `/admin?preview=1`: development-only visual preview with clearly labeled synthetic orders. All DB mutations disabled. Run `npm run dev -- --port 5174` then open `http://127.0.0.1:5174/admin?preview=1`.
+- Build mode ignores `preview=1` and requires authentication. Preview is not a deployed authentication bypass.
+- Overview derives totals from at most 200 loaded orders; completed order value is not payment settlement or accounting revenue. Dates use Europe/Berlin.
+- Order search, status filtering, selection and actual authenticated status updates are connected to existing endpoints. Menu/category search is read-only; restaurant information is read-only. No SMS, menu mutation or settings mutation is claimed.
+- Design references fetched directly through Stitch MCP: project `13359882500035204561`, overview `09e788c4531f4ced8f4c842aeb60f774`, orders `c7b4f1b31f4d40ce9688fd63cbea17d3`, menu `564a7c7fd85640778746c7f7eb1cddac`, login `37767919fc3b467ea2a84360d689ee32`.

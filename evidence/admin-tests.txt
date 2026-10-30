@@ -1,0 +1,50 @@
+
+> thien-long-ordering-web@0.1.0 test
+> tsx --test tests/*.test.ts
+
+TAP version 13
+# Subtest: unauthenticated admin is rejected before database access
+ok 1 - unauthenticated admin is rejected before database access
+  ---
+  duration_ms: 1.3166
+  type: 'test'
+  ...
+# Subtest: cross-origin mutations are rejected
+ok 2 - cross-origin mutations are rejected
+  ---
+  duration_ms: 0.1631
+  type: 'test'
+  ...
+# Subtest: session endpoint reports actual missing session
+ok 3 - session endpoint reports actual missing session
+  ---
+  duration_ms: 0.6262
+  type: 'test'
+  ...
+# Subtest: missing database fails closed
+ok 4 - missing database fails closed
+  ---
+  duration_ms: 1.0098
+  type: 'test'
+  ...
+# Subtest: signed sessions reject tampering, expiry and wrong secret
+ok 5 - signed sessions reject tampering, expiry and wrong secret
+  ---
+  duration_ms: 1.3214
+  type: 'test'
+  ...
+# Subtest: orders reject empty, duplicate and invalid quantities
+ok 6 - orders reject empty, duplicate and invalid quantities
+  ---
+  duration_ms: 3.9078
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 299.2894
