@@ -14,5 +14,4 @@
  --color-destructive: var(--destructive); --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring);
  --radius-sm:calc(var(--radius) - 4px); --radius-md:calc(var(--radius) - 2px); --radius-lg:var(--radius); --radius-xl:calc(var(--radius) + 4px);
 }
-:root{--background:#fbf8f3;--foreground:#29251f;--card:#fff;--card-foreground:#29251f;--popover:#fff;--popover-foreground:#29251f;--primary:#a43422;--primary-foreground:#fffaf3;--secondary:#f1e8dc;--secondary-foreground:#4d3b2e;--ui-muted:#f4eee5;--muted-foreground:#756a5c;--accent:#f7e8db;--accent-foreground:#87311f;--destructive:#b42318;--border:#e9e0d4;--input:#dfd2c2;--ring:#ad4a32;--radius:.625rem}
-
+:root{--background:#faf8ff;--foreground:#131b2e;--card:#fff;--card-foreground:#131b2e;--popover:#fff;--popover-foreground:#131b2e;--primary:#b51d04;--primary-foreground:#fff;--secondary:#f2f3ff;--secondary-foreground:#283044;--ui-muted:#f2f3ff;--muted-foreground:#5b403b;--accent:#eaedff;--accent-foreground:#131b2e;--destructive:#ba1a1a;--border:#edeefa;--input:#e2e7ff;--ring:#d9381e;--radius:.5rem}
