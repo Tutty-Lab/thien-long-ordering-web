@@ -44,4 +44,3 @@ export function AdminPortal(){
  {page==='settings'&&<AdminSettings preview={preview}/>}
  </main><footer className="ad-footer">Thiên Long · Olgastraße 5, Heidenheim<span>Admin Pickup</span></footer></div></div>
 }
-
