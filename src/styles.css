@@ -118,3 +118,5 @@
  .topbar{padding-top:max(10px,env(safe-area-inset-top))}
  .mobile-cart{padding-bottom:max(12px,env(safe-area-inset-bottom))}
 }
+
+.admin-login{min-height:100dvh;display:grid;place-items:center;padding:24px;background:#f6f5f1}.admin-login form{width:min(100%,380px);display:grid;gap:20px;padding:28px;background:white;border:1px solid #e5e2da;border-radius:16px}.admin-login label{display:grid;gap:8px}.admin-login input{width:100%;min-height:46px;border:1px solid #d8d5ce;border-radius:8px;padding:10px}.admin-main{max-width:1100px;margin:auto;padding:24px}.admin-main header{display:flex;align-items:center;justify-content:space-between}.admin-main .panel{margin-top:16px;padding:20px;border:1px solid #ddd;border-radius:12px}

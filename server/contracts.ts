@@ -1,0 +1,2 @@
+import { z } from 'zod';
+export const orderInput=z.object({key:z.uuid(),name:z.string().trim().min(2).max(120),phone:z.string().trim().min(7).max(30),address:z.string().trim().min(3).max(300),note:z.string().max(500).default(''),items:z.array(z.object({id:z.string().min(1).max(60),quantity:z.number().int().min(1).max(30)})).min(1).max(50)}).refine(x=>new Set(x.items.map(i=>i.id)).size===x.items.length,'Duplicate items');

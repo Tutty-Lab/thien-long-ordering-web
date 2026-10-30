@@ -1,0 +1,11 @@
+import {readFile} from 'node:fs/promises';
+import {neon} from '@neondatabase/serverless';
+const url=process.env.DATABASE_URL;if(!url)throw Error('DATABASE_URL required');
+const sql=neon(url);
+const ddl=await readFile(new URL('../db/001_neon.sql',import.meta.url),'utf8');
+const statements=ddl.split(';').map(s=>s.trim()).filter(s=>s&&s!=='BEGIN'&&s!=='COMMIT');
+await sql.transaction(statements.map(statement=>sql.query(statement)));
+const items=JSON.parse(await readFile(new URL('../db/seed.json',import.meta.url),'utf8')) as {id:string;name:string;category:string;description:string;image:string;price:number}[];
+const sales:Record<string,number>={'1':1150,'3':1090,'5':390};
+for(const x of items)await sql`INSERT INTO menu_items(id,name,category,description,image,price_cents,sale_cents) VALUES(${x.id},${x.name},${x.category},${x.description},${x.image},${Math.round(x.price*100)},${sales[x.id]??null}) ON CONFLICT(id) DO NOTHING`;
+console.log('Migration and initial catalog applied');
