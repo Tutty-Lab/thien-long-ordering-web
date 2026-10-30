@@ -1,0 +1,18 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+@theme inline {
+ --color-background: var(--background); --color-foreground: var(--foreground);
+ --color-card: var(--card); --color-card-foreground: var(--card-foreground);
+ --color-popover: var(--popover); --color-popover-foreground: var(--popover-foreground);
+ --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground);
+ --color-secondary: var(--secondary); --color-secondary-foreground: var(--secondary-foreground);
+ --color-muted: var(--ui-muted); --color-muted-foreground: var(--muted-foreground);
+ --color-accent: var(--accent); --color-accent-foreground: var(--accent-foreground);
+ --color-destructive: var(--destructive); --color-border: var(--border); --color-input: var(--input); --color-ring: var(--ring);
+ --radius-sm:calc(var(--radius) - 4px); --radius-md:calc(var(--radius) - 2px); --radius-lg:var(--radius); --radius-xl:calc(var(--radius) + 4px);
+}
+:root{--background:#fbf8f3;--foreground:#29251f;--card:#fff;--card-foreground:#29251f;--popover:#fff;--popover-foreground:#29251f;--primary:#a43422;--primary-foreground:#fffaf3;--secondary:#f1e8dc;--secondary-foreground:#4d3b2e;--ui-muted:#f4eee5;--muted-foreground:#756a5c;--accent:#f7e8db;--accent-foreground:#87311f;--destructive:#b42318;--border:#e9e0d4;--input:#dfd2c2;--ring:#ad4a32;--radius:.625rem}
+
