@@ -198,3 +198,40 @@
 .checkout-dialog .modal-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:36px}
 .checkout-dialog .modal-section-title>button{height:32px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--rust);box-shadow:none}
 .checkout-dialog [data-slot=dialog-close]{display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px}
+
+/* STOREFRONT-IMAGE-15: flush image edge, content keeps its own spacing. */
+.storefront .item{padding:0;gap:0;overflow:hidden;align-items:stretch}
+.storefront .item .photo{align-self:stretch;height:auto;min-height:96px;width:112px;flex:0 0 112px;aspect-ratio:auto}
+.storefront .item .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;aspect-ratio:auto}
+.storefront .item .item-body{padding:14px 16px;min-width:0}
+@media(max-width:700px){.storefront .item .photo{width:100px;flex-basis:100px;min-height:100px}.storefront .item .item-body{padding:12px}.storefront .item .row{margin-top:10px}}
+@media(max-width:360px){.storefront .item .photo{width:84px;flex-basis:84px;min-height:100px}.storefront .item .item-body{padding:10px}}
+
+/* STOREFRONT-IMAGE-16: square photo with all four corners rounded. */
+.storefront .item .photo{align-self:flex-start;width:112px;height:112px;min-height:112px;flex:0 0 112px;aspect-ratio:1;overflow:hidden;border-radius:11px}
+.storefront .item .photo img{border-radius:11px;aspect-ratio:1}
+@media(max-width:700px){.storefront .item .photo{width:104px;height:104px;min-height:104px;flex-basis:104px}}
+@media(max-width:360px){.storefront .item .photo{width:96px;height:96px;min-height:96px;flex-basis:96px}}
+
+/* STOREFRONT-IMAGE-17: one shared square row, no empty image gutter. */
+.storefront .item{display:grid;grid-template-columns:112px minmax(0,1fr);height:112px;align-items:stretch}
+.storefront .item .photo{width:112px;height:112px;min-height:0;align-self:stretch}
+.storefront .item .item-body{display:flex;flex-direction:column;justify-content:flex-start;min-height:0;padding:10px 14px}
+.storefront .item h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;line-height:1.4;margin:0 0 3px}
+.storefront .item .item-body>p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;line-height:1.5}
+.storefront .item .row{margin-top:auto;flex-wrap:nowrap;gap:6px;min-height:34px}
+.storefront .item .row>strong{min-width:0;font-size:14px}
+.storefront .item .row del{font-size:10px;margin-left:3px}
+@media(max-width:700px){.storefront .item{grid-template-columns:104px minmax(0,1fr);height:104px}.storefront .item .photo{width:104px;height:104px}.storefront .item .item-body{padding:8px 10px}.storefront .item .row{margin-top:auto}.storefront .item .row>strong{font-size:13px}}
+@media(max-width:360px){.storefront .item{grid-template-columns:96px minmax(0,1fr);height:96px}.storefront .item .photo{width:96px;height:96px}.storefront .item .item-body{padding:8px}.storefront .item .item-body>p{display:none}.storefront .item .row>strong{font-size:12px}.storefront .item .row del{display:block;margin:1px 0 0}.storefront .item .qty-selected button{width:28px;height:32px;min-width:28px}.storefront .item .qty-selected b{min-width:18px}}
+
+/* STOREFRONT-CATEGORIES-19: compact text navigation with shared motion underline. */
+@media(max-width:700px){
+ .storefront .mobile-navigation{padding:0 14px;background:#fff;margin-bottom:8px}
+ .storefront .mobile-navigation .categories{gap:22px;position:relative;padding:0;scrollbar-width:none;min-height:40px;align-items:stretch}
+ .storefront .mobile-navigation .categories::-webkit-scrollbar{display:none}
+ .storefront .mobile-navigation .categories button,.storefront .mobile-navigation .categories button:not(.active),.storefront .mobile-navigation .categories button.active{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;padding:10px 0 12px;min-height:40px;height:40px;background:transparent;border:0;border-radius:0;box-shadow:none;color:#737373;font-size:12px;font-weight:500;gap:0;overflow:visible}
+ .storefront .mobile-navigation .categories button.active{color:var(--rust);font-weight:600}
+ .storefront .mobile-navigation .categories .category-indicator{position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:2px;background:var(--rust);pointer-events:none}
+ .storefront .menu-section{scroll-margin-top:122px}
+}

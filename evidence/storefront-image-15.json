@@ -1,0 +1,1 @@
+{"task_id":"STOREFRONT-IMAGE-15","specification":"User requests food image flush with enclosing card edges, without surrounding padding","acceptance_criteria":["Image touches left, top and bottom card edges","Card clips image at rounded outer corners","Content retains separate padding"],"validation":{"diff_check":"PASS","browser_visual":"not performed"},"deployed":false}

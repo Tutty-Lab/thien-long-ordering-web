@@ -244,3 +244,7 @@
 .ad-editor [data-slot=dialog-close],.ad-order-dialog [data-slot=dialog-close]{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0}
 .ad-editor [data-slot=select-trigger],.ad-settings-form [data-slot=select-trigger]{align-items:center}
 .ad-menu-table td[data-label="Trạng thái"]>div{align-items:center}
+
+/* ADMIN-DASHBOARD-SPACING-18: separate consecutive dashboard panels. */
+.ad-daily-chart + .ad-daily-chart{margin-top:24px}
+@media(max-width:640px){.ad-daily-chart + .ad-daily-chart{margin-top:0}}
