@@ -85,14 +85,6 @@
 @media(max-width:900px){.ad-orders-layout{grid-template-columns:1fr}.ad-order-list{grid-column:1;grid-row:1;max-height:none;overflow:visible;grid-template-columns:1fr}.ad-order-pagination{grid-column:1;grid-row:2}.ad-order-detail{grid-column:1;grid-row:3;max-height:none;overflow:visible}.ad-metrics .ad-metric{padding:14px}.ad-metrics .ad-metric strong{font-size:24px}}
 
 /* ADMIN-SETTINGS-07: compact settings and readable shadcn availability control. */
-.ad-sale-toggle .ad-availability-switch{width:38px;height:22px;min-width:38px;padding:2px;border:0;box-shadow:none;cursor:pointer}
-.ad-sale-toggle .ad-availability-switch[data-state=checked]{background:#218453}
-.ad-sale-toggle .ad-availability-switch[data-state=unchecked]{background:#c6c9cf}
-.ad-availability-switch [data-slot=switch-thumb]{width:18px;height:18px;background:#fff;box-shadow:0 1px 3px #0002}
-.ad-availability-switch [data-slot=switch-thumb][data-state=checked]{transform:translateX(16px)}
-.ad-availability-switch [data-slot=switch-thumb][data-state=unchecked]{transform:translateX(0)}
-.ad-sale-toggle .ad-availability-switch:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
-.ad-sale-toggle .ad-availability-switch:disabled{cursor:wait;opacity:.5}
 .ad-settings-form{max-width:760px;grid-template-columns:1fr;gap:16px}
 .ad-settings-form .ad-settings-fields{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;padding:24px;border:0;box-shadow:none;border-radius:12px}
 .ad-settings-fields label{font-size:13px;gap:8px;min-width:0}
@@ -100,3 +92,155 @@
 .ad-settings-fields input{height:42px;background:#fff;box-shadow:none;border-color:#dedee4;border-radius:8px}
 .ad-settings-form>.ad-action-row{padding:0;justify-content:flex-end}
 @media(max-width:640px){.ad-settings-form .ad-settings-fields{grid-template-columns:1fr;padding:18px;gap:18px}.ad-settings-fields .ad-settings-address{grid-column:auto;grid-row:auto}.ad-settings-form>.ad-action-row button{width:100%}}
+
+/* ADMIN-MOBILE-10: responsive views; keyboard focus rings remain accessible. */
+.ad-app,.ad-login,.ad-editor,.ad-order-dialog{font-family:'Be Vietnam Pro',sans-serif}
+.ad-nav-mobile,.ad-mobile-category{display:none}
+.ad-food-meta{display:flex;align-items:center;gap:8px}
+.ad-order-dialog{padding:0;gap:0;overflow:hidden;font-family:'Be Vietnam Pro',sans-serif}
+.ad-order-dialog .ad-order-detail{position:static;max-height:calc(90dvh - 32px);overflow-y:auto;border:0;border-radius:0;padding:28px 20px 20px;margin:0;box-shadow:none}
+.ad-order-dialog .ad-section-heading{padding-right:24px}
+.ad-order-status-tabs{min-width:0}
+@media(max-width:900px){
+ .ad-order-tabs{display:flex;flex-wrap:wrap;width:100%;height:auto;overflow:visible;padding:0;gap:8px}
+ .ad-order-tabs [data-slot=tabs-trigger]{height:auto;min-height:44px;padding:12px 14px;border:0;gap:6px;flex:0 1 auto;background:#fff}
+ .ad-order-tabs [data-slot=tabs-trigger][data-state=active]{background:var(--accent);color:var(--primary)}
+ .ad-order-list .ad-order{border:0;border-radius:12px;padding:16px;box-shadow:none}
+ .ad-order-list .ad-order.selected{box-shadow:none}
+}
+@media(max-width:640px){
+ .ad-content{padding:22px 16px}
+ .ad-page-heading h1{font-size:22px;letter-spacing:-.035em}
+ .ad-nav-desktop{display:none!important}.ad-nav-mobile{display:inline}
+ .ad-sidebar{height:calc(76px + env(safe-area-inset-bottom));padding:0 8px env(safe-area-inset-bottom);background:#fff;box-shadow:0 -4px 24px #131b2e06}
+ .ad-sidebar nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;gap:2px}
+ .ad-sidebar nav button{height:64px;min-height:64px;padding:8px 0;gap:6px;font-size:10px;border-radius:12px;color:#727581;transition:color .15s,background-color .15s}
+ .ad-sidebar nav button span{max-width:none;overflow:visible;text-overflow:clip}
+ .ad-sidebar nav button svg{width:21px;height:21px}
+ .ad-sidebar nav button[aria-current=page],.ad-sidebar nav button[aria-current=page]:hover{background:#fff1ec;color:var(--primary);box-shadow:none}
+ .ad-sidebar nav button b{top:4px;right:12px;font-size:9px;min-width:16px;padding:0 4px;border-radius:10px}
+ .ad-sidebar-logout{width:48px;height:76px;min-height:76px;padding:0;gap:6px;font-size:9px;border:0;background:transparent;box-shadow:none}
+ .ad-sidebar-logout svg{width:19px;height:19px}
+ .ad-workspace{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+ .ad-order-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .ad-order-tabs [data-slot=tabs-trigger]{justify-content:space-between;padding:13px 12px;font-size:12px;min-height:46px;white-space:normal}
+ .ad-order-tabs b{font-size:11px;opacity:.65}
+ .ad-order-list{gap:12px;padding:0}
+ .ad-order-status-tabs{margin-bottom:6px}
+ .ad-order-dialog[data-slot=dialog-content]{inset:auto 0 0;translate:none;transform:none;animation:none;width:100%;max-width:100%;max-height:94dvh;border:0;border-radius:18px 18px 0 0}
+ .ad-order-dialog .ad-order-detail{max-height:94dvh;padding:26px 20px max(24px,env(safe-area-inset-bottom))}
+ .ad-order-dialog .ad-order-detail>.ad-section-heading{margin:0 20px 8px 0}
+ .ad-order-dialog .ad-customer{border:0;padding:12px 0}
+ .ad-order-dialog .ad-receipt-table td{padding:10px 4px;white-space:normal}
+ .ad-category-tabs{overflow:visible;margin-bottom:16px}
+ .ad-category-tabs [data-slot=tabs-list]{display:flex;flex-wrap:wrap;width:100%;height:auto;gap:6px;padding:0}
+ .ad-category-tabs [data-slot=tabs-trigger]{height:auto;min-height:42px;padding:10px 12px;border:0;font-size:12px}
+ .ad-catalog-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(125px,.8fr);gap:8px;align-items:center}
+ .ad-catalog-controls .ad-search{width:100%;min-width:0}
+ .ad-catalog-controls [data-slot=select-trigger]{width:100%;min-width:0;font-size:11px;box-shadow:none;background:#fff;border:0;height:42px}
+ .ad-catalog-controls .ad-search input{height:42px;border:0;box-shadow:none;padding-left:32px;font-size:12px}
+ .ad-catalog-controls .ad-search>svg{left:10px;width:15px}
+ .ad-table-wrap{background:transparent;border:0;box-shadow:none;overflow:visible}
+ .ad-menu-table tbody{gap:14px}
+ .ad-menu-table tr{grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:16px;background:#fff;border:0;border-radius:12px;box-shadow:none}
+ .ad-menu-table td,.ad-menu-table td:first-child{border:0;width:auto;min-width:0;padding:0}
+ .ad-menu-table td[data-label]:before{display:none}
+ .ad-menu-table td[data-label="Danh mục"]{display:none}
+ .ad-mobile-category{display:inline-flex;border:0;background:#f4f3f7;color:#68616a;font-size:10px;padding:3px 6px;white-space:normal;line-height:1.3}
+ .ad-menu-table td:first-child>div{align-items:flex-start;gap:12px}
+ .ad-menu-table td:first-child b{display:block;line-height:1.5}
+ .ad-menu-table small{font-size:11px}
+ .ad-menu-table img,.ad-menu-table .ad-image-placeholder{width:64px;height:64px}
+ .ad-menu-table td[data-label="Đơn giá"]{grid-row:2;grid-column:1;align-self:center;font-size:14px}
+ .ad-menu-table td[data-label="Trạng thái"]{grid-row:2;grid-column:2;padding-right:40px;align-self:center}
+ .ad-menu-table td:last-child{right:12px;bottom:14px}
+ .ad-sale-toggle{gap:0}
+ .ad-sale-toggle>span{display:none}
+ .ad-sale-toggle [data-slot=switch]{flex-shrink:0}
+ .ad-menu-table .ad-edit-button{height:32px;width:32px;background:transparent}
+ .ad-catalog-stat{padding:14px;gap:6px}
+ .ad-catalog-stat svg{background:none;padding:0;width:18px;height:18px}
+ .ad-catalog-stat span{font-size:9px;letter-spacing:0}
+ .ad-daily-chart{padding:16px;margin-bottom:16px}
+ .ad-daily-chart [data-slot=table]{font-size:12px}
+ .ad-daily-chart th,.ad-daily-chart td{padding:10px 6px}
+ .ad-daily-chart th:nth-child(3),.ad-daily-chart td:nth-child(3){display:none}
+ .ad-date-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px}
+ .ad-date-toolbar input{width:100%;min-width:0;font-size:12px}
+ .ad-date-toolbar button{padding:0 10px;font-size:11px}
+ .ad-editor[data-slot=dialog-content]{width:calc(100% - 24px);max-width:calc(100% - 24px);padding:0;gap:0;font-family:'Be Vietnam Pro',sans-serif}
+ .ad-editor .ad-editor-header{padding:20px 48px 12px 18px}
+ .ad-editor .ad-editor-body{padding:12px 18px 20px}
+ .ad-form-grid{grid-template-columns:1fr 1fr;gap:10px}
+ .ad-form-grid label{min-width:0;font-size:12px}
+ .ad-editor input{min-width:0}
+ .ad-settings-fields input{font-size:16px}
+}
+
+@media(max-width:640px){.ad-sidebar nav button{transition:none}.ad-sidebar-logout{transition:none}}
+
+/* ADMIN-MOBILE-11: separate category scrolling from wrapping order statuses. */
+.ad-order-identity{min-width:0}
+.ad-order-identity .ad-order-time{font-size:11px;font-weight:400;color:var(--muted-foreground);margin:6px 0 0;line-height:1.5}
+.ad-order-detail .ad-section-heading{align-items:flex-start;gap:12px}
+.ad-order-detail .ad-customer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 12px;padding:14px 0}
+.ad-order-detail .ad-customer a{margin:0;font-size:12px;overflow-wrap:anywhere}
+.ad-order-detail .ad-customer p{grid-column:1/-1;margin:0;overflow-wrap:anywhere}
+.ad-order-detail .ad-order-note{margin:0;padding:4px 0!important}
+.ad-order-detail h3{margin:16px 0 6px;font-size:14px}
+@media(max-width:640px){
+ html.ad-document{overflow-y:scroll;scrollbar-width:none}
+ html.ad-document::-webkit-scrollbar,html.ad-document body::-webkit-scrollbar{display:none;width:0}
+ .ad-sidebar nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .ad-category-tabs{display:block;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:2px 0 6px;margin:0 0 14px;-webkit-overflow-scrolling:touch}
+ .ad-category-tabs::-webkit-scrollbar{display:none}
+ .ad-category-tabs [data-slot=tabs-list]{display:flex;flex-wrap:nowrap;width:max-content;max-width:none;height:auto;gap:8px;background:transparent}
+ .ad-category-tabs [data-slot=tabs-trigger]{flex:0 0 auto;min-height:42px;height:auto;padding:11px 14px;white-space:nowrap;background:#fff;border:0;border-radius:9px;color:var(--muted-foreground)}
+ .ad-category-tabs [data-slot=tabs-trigger][data-state=active]{background:#f9e8e1;color:var(--primary)}
+ .ad-order-status-tabs,.ad-order-tabs{overflow:visible;scrollbar-width:none}
+ .ad-order-tabs{width:100%;max-width:100%;height:auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ad-order-dialog .ad-order-detail{padding-top:24px}
+ .ad-order-dialog .ad-order-detail>.ad-section-heading{margin:0 24px 10px 0;padding:0}
+ .ad-order-dialog .ad-order-identity h2{font-size:19px;line-height:1.25}
+ .ad-order-dialog .ad-badge{margin-top:3px;font-size:9px}
+ .ad-order-dialog .ad-order-detail .ad-customer{padding:10px 0;gap:6px 10px;font-size:13px}
+ .ad-order-dialog .ad-order-detail .ad-customer a{font-size:12px}
+ .ad-order-dialog .ad-order-detail .ad-order-total{padding:10px 0}
+ .ad-order-dialog .ad-order-detail .ad-status-label{margin-top:10px}
+}
+@media(max-width:360px){.ad-order-detail .ad-customer{grid-template-columns:1fr}.ad-order-detail .ad-customer p{grid-column:1}.ad-order-dialog .ad-badge{max-width:110px;white-space:normal}}
+
+/* ADMIN-THEME-12: white surfaces, black text, red accents. */
+.ad-app,.ad-login,.ad-editor,.ad-order-dialog{--background:#fff;--foreground:#171717;--card:#fff;--card-foreground:#171717;--popover:#fff;--popover-foreground:#171717;--primary:#b51d04;--primary-foreground:#fff;--secondary:#f5f5f5;--secondary-foreground:#171717;--ui-muted:#f5f5f5;--muted-foreground:#737373;--accent:#fff0ed;--accent-foreground:#171717;--border:#e8e8e8;--input:#dedede;--ring:#b51d04;background:#fff;color:#171717}
+.ad-app [data-slot=card],.ad-app .ad-surface,.ad-app .ad-order,.ad-app .ad-table-wrap{border:1px solid var(--border);box-shadow:0 2px 8px rgb(0 0 0 / 4%);background:#fff}
+.ad-app .ad-order.selected{border-color:var(--primary);box-shadow:0 2px 8px rgb(0 0 0 / 4%)}
+.ad-app .ad-catalog-stat svg,.ad-app .ad-metric svg{color:var(--primary);background:transparent;padding:0}
+.ad-app .ad-category-badge,.ad-app .ad-mobile-category{background:#f5f5f5;color:#525252}
+.ad-app .ad-menu-table th{background:#fafafa;color:#525252}
+.ad-app .ad-search input,.ad-app [data-slot=select-trigger]{background:#fff}
+.ad-app .ad-edit-button{background:#f5f5f5;color:#171717}
+.ad-app .ad-order-tabs [data-slot=tabs-trigger]{background:#f7f7f7;color:#525252}
+.ad-app .ad-order-tabs [data-slot=tabs-trigger][data-state=active]{background:#fff0ed;color:var(--primary)}
+.ad-app .ad-sidebar nav button[aria-current=page]{background:#fff0ed;color:var(--primary);box-shadow:none}
+.ad-app .ad-sidebar nav button[aria-current=page]:hover{background:#ffe5df}
+.ad-order-dialog .ad-order-detail{background:#fff;border:0;box-shadow:none}
+@media(max-width:640px){
+ .ad-app .ad-table-wrap{border:0;box-shadow:none;background:transparent}
+ .ad-app .ad-menu-table tr{grid-template-columns:minmax(0,1fr) auto auto;column-gap:14px;border:1px solid var(--border);box-shadow:0 2px 8px rgb(0 0 0 / 4%);padding:16px;align-items:center}
+ .ad-app .ad-menu-table td:first-child{grid-column:1/-1}
+ .ad-app .ad-menu-table td[data-label="Đơn giá"]{grid-column:1;grid-row:2;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;padding:0;align-self:center}
+ .ad-app .ad-menu-table td[data-label="Đơn giá"] small{margin:0;display:inline;font-size:11px}
+ .ad-app .ad-menu-table td[data-label="Trạng thái"]{grid-column:2;grid-row:2;padding:0;align-self:center}
+ .ad-app .ad-menu-table td:last-child{position:static;grid-column:3;grid-row:2;padding:0;align-self:center;display:flex;align-items:center}
+ .ad-app .ad-menu-table .ad-edit-button{height:32px;width:32px;padding:0;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center}
+ .ad-app .ad-category-tabs [data-slot=tabs-trigger]{background:#f5f5f5;color:#525252}
+ .ad-app .ad-category-tabs [data-slot=tabs-trigger][data-state=active]{background:#fff0ed;color:var(--primary)}
+}
+
+.ad-settings-logout{margin-top:28px;padding-top:20px;border-top:1px solid var(--border);max-width:760px}.ad-settings-logout button{color:var(--destructive);gap:8px;box-shadow:none}@media(max-width:640px){.ad-settings-logout button{width:100%;min-height:44px}}
+
+/* Keep portal controls aligned with their trigger and icon buttons centered. */
+.ad-password button[data-slot=button],.ad-edit-button[data-slot=button]{display:inline-flex;align-items:center;justify-content:center;padding:0}
+.ad-editor [data-slot=dialog-close],.ad-order-dialog [data-slot=dialog-close]{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0}
+.ad-editor [data-slot=select-trigger],.ad-settings-form [data-slot=select-trigger]{align-items:center}
+.ad-menu-table td[data-label="Trạng thái"]>div{align-items:center}

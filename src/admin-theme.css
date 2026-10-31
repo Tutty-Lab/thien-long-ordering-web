@@ -15,3 +15,10 @@
  --radius-sm:calc(var(--radius) - 4px); --radius-md:calc(var(--radius) - 2px); --radius-lg:var(--radius); --radius-xl:calc(var(--radius) + 4px);
 }
 :root{--background:#faf8ff;--foreground:#131b2e;--card:#fff;--card-foreground:#131b2e;--popover:#fff;--popover-foreground:#131b2e;--primary:#b51d04;--primary-foreground:#fff;--secondary:#f2f3ff;--secondary-foreground:#283044;--ui-muted:#f2f3ff;--muted-foreground:#5b403b;--accent:#eaedff;--accent-foreground:#131b2e;--destructive:#ba1a1a;--border:#edeefa;--input:#e2e7ff;--ring:#d9381e;--radius:.5rem}
+
+/* Normalize UA control defaults before shadcn utilities and product styles. */
+@layer base{
+ [data-slot=button],[data-slot=switch],[data-slot=select-trigger],[data-slot=dialog-close]{margin:0;padding:0;border:0 solid currentColor;background:transparent;font-family:inherit;box-sizing:border-box}
+ [data-slot=input],[data-slot=textarea]{margin:0;box-sizing:border-box}
+ [data-slot=button]>svg,[data-slot=select-trigger]>svg,[data-slot=dialog-close]>svg{display:block;flex-shrink:0}
+}

@@ -1,1 +1,18 @@
-{"name":"Thiên Long · Đặt món","short_name":"Thiên Long","start_url":"/","scope":"/","display":"standalone","background_color":"#faf8ff","theme_color":"#faf8ff","lang":"vi"}
+{
+  "name": "Thiên Long · Đặt món",
+  "short_name": "Thiên Long",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+ "task_id":"UI-CONSISTENCY-14",
+ "specification":"User requests cross-view alignment review and replacing custom controls with library components",
+ "acceptance_criteria":["Normalize native control defaults before shadcn utilities","Icon buttons center icons","Language picker uses shadcn Select","Quantity controls shared across dish cards and cart","Admin transient notifications use Sonner","Mobile and desktop pages avoid horizontal overflow"],
+ "changes":["shadcn icon size variants include p-0","UA normalization in base CSS layer","LanguagePicker uses shadcn Select with library keyboard/focus handling","QuantityControl composed of shadcn Buttons","Sonner replaces custom catalog toast and timer"],
+ "validation":{
+  "script":"scripts/ui-layout-audit.js",
+  "widths":[320,390,540,768,1024,1440],
+  "views":["storefront","checkout","admin overview","admin orders","admin menu","admin settings","order dialog","menu editor"],
+  "first_full_live_browser_audit":"PASS before Sonner addition",
+  "icon_centers":"PASS within 2px",
+  "language_selection":"PASS VI to DE to VI",
+  "bounds_and_overflow":"PASS at all widths in first audit",
+  "switch_track_containment":"PASS",
+  "logout_in_settings":"PASS",
+  "sonner_followup":"PASS with intercepted PATCH; no database mutation",
+  "unit_tests":{"passed":17,"failed":0},
+  "production_build":"PASS",
+  "diff_check":"PASS",
+  "failed_evidence":[
+   {"kind":"Vite dependency optimization","message":"Invalid hook call while sonner dependency optimized","recovery":"Automatic full reload recovered; followup Sonner interaction PASS"},
+   {"kind":"Final repeated live browser audit","message":"admin-menu HTTP 503, server errorType NeonDbError; timeout waiting for switch"},
+   {"kind":"Final repeated live browser audit retry","message":"Public menu unavailable; timeout waiting for .item"}
+  ],
+  "limitation":"Full audit of final Sonner version could not finish against live DB because API began returning 503; first full audit and isolated Sonner interaction passed. DB failure not resolved."
+ },
+ "business_data_writes":0,
+ "deployed":false
+}

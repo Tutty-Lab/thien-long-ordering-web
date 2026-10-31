@@ -1,0 +1,33 @@
+{
+  "task_id": "ADMIN-MOBILE-10",
+  "specification": "User mobile browser comments 1-10; change admin font; review each mobile view",
+  "acceptance_criteria": [
+    "Be Vietnam Pro bundled locally for admin",
+    "Order status tabs wrap, no horizontal scroll, comfortable vertical padding",
+    "Mobile order selection opens shadcn Dialog, desktop retains inline detail",
+    "Stable bottom navigation with complete short labels",
+    "shadcn Switch thumb remains within track in checked and unchecked states",
+    "Mobile menu rows have spacing and no decorative borders; category beside food metadata",
+    "Search and status filter share one row; result count removed",
+    "Settings and editor dialogs fit mobile viewport"
+  ],
+  "validation": {
+    "browser": "Playwright Edge",
+    "widths": [320,390,513,540],
+    "views_checked": ["overview","orders","menu","settings"],
+    "page_horizontal_overflow_assertions": "PASS across all four views and widths",
+    "order_tab_scroll_assertions": "PASS at all four widths",
+    "mobile_order_dialog_bounds": "PASS at all four widths",
+    "switch_checked_bounds": "PASS at all four widths",
+    "switch_unchecked_and_rechecked": "PASS with PATCH response intercepted; no database mutation",
+    "editor_category_dialogs": "PASS, inspected screenshots at 390px",
+    "desktop_1366": "PASS, inline order detail and no modal",
+    "unit_tests": {"passed":17,"failed":0},
+    "production_build": "PASS",
+    "diff_check": "PASS",
+    "npm_audit": {"vulnerabilities":0},
+    "initial_failure_preserved": {"check":"switch track containment","track":{"x":204,"width":44},"thumb":{"x":232,"width":20},"cause":"Browser default button padding 1px 6px; app omits Tailwind preflight","repair":"p-0 in shadcn Switch root; removed custom switch transforms","retest":"PASS"}
+  },
+  "screenshots": ["design/admin-overview-10.png","design/admin-orders-10.png","design/admin-order-detail-10.png","design/admin-menu-10.png","design/admin-editor-10.png","design/admin-category-10.png","design/admin-settings-10.png","design/admin-desktop-10.png"],
+  "production_deployed": false
+}
