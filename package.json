@@ -4,10 +4,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "tsx scripts/dev.ts",
     "build": "tsc --noEmit && tsc --noEmit -p tsconfig.server.json && vite build",
     "test": "tsx --test tests/*.test.ts",
-    "db:migrate": "tsx scripts/migrate.ts"
+    "db:migrate": "tsx scripts/migrate.ts",
+    "dev:ui": "vite --host 127.0.0.1"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

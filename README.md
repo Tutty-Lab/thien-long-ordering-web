@@ -77,3 +77,11 @@ No settings for SMS, online payment, tax accounting, ingredient options, allerge
 Supersedes local preview instructions above: admin preview disabled, including in development; `/admin?preview=1` requires authentication. Production admin uses real API data. Removed workspace header, location tile, customer-site link and profile footer. Logout resides at sidebar bottom (fifth bottom-nav action on mobile).
 
 Migration 002 applied through authenticated Vercel Neon Query editor on 2026-10-30 using individually verified idempotent statements. Readback: 5 categories, 1 restaurant settings record, 6 menu items. SQL editor returned to read-only mode. No menu/order rows overwritten. Actual authenticated admin save/readback still needs session verification; migration/read-only API smoke checks do not prove that workflow.
+
+## Local frontend + API (ORDER-RUNTIME-01)
+
+`npm run dev` now starts the actual Vercel handler behind a Node HTTP adapter plus Vite, bound to `127.0.0.1:5174`. `PORT=5175` can select another port (PowerShell: `$env:PORT='5175'`). `npm run dev:ui` runs frontend only and cannot process orders.
+
+Supply a separate development Neon database in ignored `.env.local`: `DATABASE_URL`, `ADMIN_PASSWORD` (12+ characters), `SESSION_SECRET` (32+ characters). Do not copy production secrets. Apply migrations with `npm run db:migrate` after explicitly loading the development DATABASE_URL into the shell; the migration command does not load .env.local itself. Restart dev server after env edits. Local HTTP cookies omit Secure only inside the loopback adapter; production cookie attributes remain unchanged. API validates Host and Origin; JSON body limit 64 KiB.
+
+Menu now starts empty, validates the server payload, handles an empty menu as authoritative, and reports load failure instead of showing sample food. Admin refreshes orders every 15 seconds while visible; this is polling, not SignalR/WebSocket delivery. Failed refresh displays error; session expiry returns to login. It does not run while a mutation is busy.
