@@ -1,0 +1,10 @@
+{
+  "task_id": "CHECKOUT-SUCCESS-01",
+  "acceptance": "Success view replaces checkout form inside existing dialog after validated API response",
+  "build": "PASS",
+  "tests_passed": 14,
+  "diff_check": "PASS",
+  "live_order_write_test": "NOT_RUN_SHARED_PRODUCTION",
+  "visual_browser_check": "NOT_RUN",
+  "receipt_total": "Server response snapshot independent of cleared cart"
+}

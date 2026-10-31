@@ -1,0 +1,1 @@
+{"task_id":"STOREFRONT-SEARCH-06","specification":"Browser comment: redesign header search","acceptance_criteria":["Single search surface, no nested input border","shadcn Input retained","Accessible search label retained","Mobile search stays hidden"],"validation":{"typescript":"PASS","visual_browser":"not performed"},"deployed":false}

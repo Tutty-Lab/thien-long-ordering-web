@@ -1,13 +1,15 @@
+import {normalizeImage} from '../server/image.js';
 import type { IncomingMessage,ServerResponse } from 'node:http';
 type VercelRequest=Pick<IncomingMessage,'headers'|'method'> & {query:Record<string,string|string[]|undefined>;cookies:Record<string,string|undefined>;body:Record<string,unknown>};
 type VercelResponse=ServerResponse & {status(code:number):VercelResponse;json(body:unknown):VercelResponse};
 import { neon } from '@neondatabase/serverless';
 import { createHash,randomUUID } from 'node:crypto';
 import { z } from 'zod';
-import { menuInput,categoryInput,restaurantInput } from '../server/admin-contracts.js';
+import { availabilityInput,menuInput,categoryInput,restaurantInput } from '../server/admin-contracts.js';
 import { orderInput } from '../server/contracts.js';
-import { equal,session,valid } from '../server/security.js';
-export default async function handler(req:VercelRequest,res:VercelResponse){
+import { adminConfigured,equal,session,valid } from '../server/security.js';
+export function createHandler(options:{minimumPasswordLength:6|12}={minimumPasswordLength:12}){
+ return async function handler(req:VercelRequest,res:VercelResponse){
  const correlationId=randomUUID();res.setHeader('Cache-Control','no-store');res.setHeader('X-Request-ID',correlationId);
  const action=String(req.query.action||'');
  const secret=process.env.SESSION_SECRET||'';
@@ -21,23 +23,37 @@ export default async function handler(req:VercelRequest,res:VercelResponse){
   const limit=async(bucket:string,max:number)=>{const key=createHash('sha256').update(bucket+':'+String(req.headers['x-real-ip']||'unknown')).digest('hex');const rows=await sql`INSERT INTO rate_limits(key,hits,expires_at) VALUES(${key},1,now()+interval '5 minutes') ON CONFLICT(key) DO UPDATE SET hits=CASE WHEN rate_limits.expires_at<now() THEN 1 ELSE rate_limits.hits+1 END,expires_at=CASE WHEN rate_limits.expires_at<now() THEN now()+interval '5 minutes' ELSE rate_limits.expires_at END RETURNING hits`;return Number(rows[0].hits)<=max};
   if(action==='login'&&req.method==='POST'){
    if(!await limit('login',10))return res.status(429).json({error:'Too many attempts'});
-   const password=process.env.ADMIN_PASSWORD||'';if(password.length<12||secret.length<32)return res.status(503).json({error:'Admin not configured'});
+   const password=process.env.ADMIN_PASSWORD||'';if(!adminConfigured(password,secret,options.minimumPasswordLength))return res.status(503).json({error:'Admin not configured'});
    if(!equal(String(req.body?.username||''),'admin')||!equal(String(req.body?.password||''),password))return res.status(401).json({error:'Invalid credentials'});
    res.setHeader('Set-Cookie',`tl_admin=${session(secret)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=28800`);return res.json({authenticated:true});
   }
   if(action==='logout'&&req.method==='POST'){res.setHeader('Set-Cookie','tl_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0');return res.json({ok:true})}
-  if(action==='menu'&&req.method==='GET'){const rows=await sql`SELECT * FROM menu_items WHERE available=true ORDER BY id`;return res.json(rows.map(x=>({id:x.id,name:x.name,category:x.category,description:x.description,image:x.image,price:Number(x.price_cents)/100,sale:x.sale_cents===null?null:Number(x.sale_cents)/100})))}
+  if(action==='image'&&req.method==='GET'){
+   const id=z.string().min(1).max(60).safeParse(req.query.id);if(!id.success)return res.status(400).json({error:'Invalid image ID'});
+   const rows=await sql`SELECT image FROM menu_items WHERE id=${id.data} AND available=true`;
+   const match=/^data:image\/(webp|png|jpeg);base64,([A-Za-z0-9+/]+={0,2})$/.exec(String(rows[0]?.image||''));
+   if(!match)return res.status(404).json({error:'Image unavailable'});
+   res.setHeader('Content-Type','image/'+match[1]);res.setHeader('X-Content-Type-Options','nosniff');res.end(Buffer.from(match[2],'base64'));return;
+  }
+  if(action==='menu'&&req.method==='GET'){const rows=await sql`SELECT * FROM menu_items WHERE available=true ORDER BY id`;return res.json(rows.map(x=>({id:x.id,name:x.name,category:x.category,description:x.description,image:x.image.startsWith('data:')?'/api/index?action=image&id='+encodeURIComponent(x.id):x.image,price:Number(x.price_cents)/100,sale:x.sale_cents===null?null:Number(x.sale_cents)/100})))}
   if(action==='restaurant'&&req.method==='GET')return res.json((await sql`SELECT name,address,phone,preparation_minutes FROM restaurant_settings WHERE id=1`)[0]);
+  if(action==='admin-summary'&&req.method==='GET'){
+   const parsed=z.iso.date().safeParse(req.query.date);if(!parsed.success)return res.status(400).json({error:'Invalid date'});
+   const rows=await sql`SELECT extract(hour from created_at AT TIME ZONE 'Europe/Berlin')::int AS hour,status,count(*)::int AS count,coalesce(sum(total_cents),0)::text AS total_cents FROM orders WHERE created_at >= (${parsed.data}::date::timestamp AT TIME ZONE 'Europe/Berlin') AND created_at < ((${parsed.data}::date+1)::timestamp AT TIME ZONE 'Europe/Berlin') GROUP BY 1,2 ORDER BY 1,2`;
+   return res.json(rows.map(x=>({hour:Number(x.hour),status:x.status,count:Number(x.count),total_cents:Number(x.total_cents)})));
+  }
   if(action==='admin-menu'){
+   if(req.method==='PATCH'){const parsed=availabilityInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid availability'});const rows=await sql`UPDATE menu_items SET available=${parsed.data.available} WHERE id=${parsed.data.id} RETURNING id`;return res.status(rows.length?200:404).json({ok:!!rows.length})}
    if(req.method==='GET')return res.json(await sql`SELECT * FROM menu_items ORDER BY category,id`);
    if(req.method==='POST'||req.method==='PUT'){
     const parsed=menuInput.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Invalid menu item'});
     const x=parsed.data;
+    try{x.image=await normalizeImage(x.image)}catch{return res.status(400).json({error:'Invalid image. Use PNG, JPEG or WebP up to 128 KB.'})}
     if(req.method==='POST'){
      const rows=await sql`INSERT INTO menu_items(id,name,category,description,image,price_cents,sale_cents,available) SELECT ${x.id},${x.name},${x.category},${x.description},${x.image},${x.price_cents},${x.sale_cents},${x.available} WHERE EXISTS(SELECT 1 FROM menu_categories WHERE name=${x.category}) ON CONFLICT(id) DO NOTHING RETURNING id`;
      return res.status(rows.length?201:409).json({ok:!!rows.length});
     }
-    const rows=await sql`UPDATE menu_items SET name=${x.name},category=${x.category},description=${x.description},image=${x.image},price_cents=${x.price_cents},sale_cents=${x.sale_cents},available=${x.available} WHERE id=${x.id} AND EXISTS(SELECT 1 FROM menu_categories WHERE name=${x.category}) RETURNING id`;
+    const rows=await sql`UPDATE menu_items SET name=${x.name},category=${x.category},description=${x.description},image=${x.image},price_cents=${x.price_cents},sale_cents=${x.sale_cents} WHERE id=${x.id} AND EXISTS(SELECT 1 FROM menu_categories WHERE name=${x.category}) RETURNING id`;
     return res.status(rows.length?200:404).json({ok:!!rows.length});
    }
   }
@@ -70,4 +86,5 @@ export default async function handler(req:VercelRequest,res:VercelResponse){
   return res.status(action.startsWith('admin')?401:404).json({error:'Not available'});
  }catch(error){console.error(JSON.stringify({correlationId,event:'request_failed',errorType:error instanceof Error?error.name:'Unknown'}));return res.status(503).json({error:'Service unavailable',correlationId})}
 }
-
+}
+export default createHandler();

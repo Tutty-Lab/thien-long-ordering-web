@@ -1,6 +1,8 @@
 import {createServer} from 'node:http';
 import {loadEnv,createServer as createViteServer} from 'vite';
-import handler from '../api/index.js';
+import {createHandler} from '../api/index.js';
+// Explicit loopback-only policy; deployed default handler still requires 12 characters.
+const handler=createHandler({minimumPasswordLength:6});
 
 // Local-only adapter. No remote credentials are fetched; .env.local is operator supplied.
 const env=loadEnv('development',process.cwd(),'');
@@ -15,7 +17,7 @@ const server=createServer(async(req,res)=>{
  const response=Object.assign(res,{status(code:number){res.statusCode=code;return response},json(value:unknown){res.setHeader('Content-Type','application/json; charset=utf-8');res.end(JSON.stringify(value));return response}});
  try{
   let size=0;const chunks:Buffer[]=[];
-  for await(const chunk of req){const bytes=Buffer.from(chunk);size+=bytes.length;if(size>65536){response.status(413).json({error:'Request too large'});return}chunks.push(bytes)}
+  for await(const chunk of req){const bytes=Buffer.from(chunk);size+=bytes.length;if(size>(url.searchParams.get('action')==='admin-menu'?262144:65536)){response.status(413).json({error:'Request too large'});return}chunks.push(bytes)}
   const raw=Buffer.concat(chunks).toString();
   let body:Record<string,unknown>={};
   if(raw){try{body=JSON.parse(raw)}catch{response.status(400).json({error:'Invalid JSON'});return}}

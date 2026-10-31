@@ -14,4 +14,4 @@ test('cross-origin mutations are rejected',async()=>{assert.equal((await call('o
 test('session endpoint reports actual missing session',async()=>{assert.deepEqual((await call('session')).body,{authenticated:false})});
 test('missing database fails closed',async()=>{const saved=process.env.DATABASE_URL;delete process.env.DATABASE_URL;try{assert.equal((await call('menu')).code,503)}finally{if(saved)process.env.DATABASE_URL=saved}});
 
-test('all admin resources reject unauthenticated reads and writes',async()=>{for(const route of ['admin-menu','admin-categories','admin-settings'])for(const method of ['GET','POST','PUT'])assert.equal((await call(route,method)).code,401)});
+test('all admin resources reject unauthenticated reads and writes',async()=>{for(const route of ['admin-menu','admin-categories','admin-settings','admin-summary'])for(const method of ['GET','POST','PUT','PATCH'])assert.equal((await call(route,method)).code,401)});

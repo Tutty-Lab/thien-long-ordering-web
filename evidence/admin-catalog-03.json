@@ -1,0 +1,9 @@
+{
+  "task_id": "ADMIN-CATALOG-03",
+  "build": "PASS",
+  "tests_passed": 13,
+  "invalid_availability_status": 400,
+  "unauthenticated_patch_status": 401,
+  "database_mutation_test": "NOT_RUN_SHARED_PRODUCTION",
+  "visual_check": "BLOCKED_BROWSER_USER_UNAVAILABLE"
+}
