@@ -235,3 +235,20 @@
  .storefront .mobile-navigation .categories .category-indicator{position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:2px;background:var(--rust);pointer-events:none}
  .storefront .menu-section{scroll-margin-top:122px}
 }
+
+/* CHECKOUT-MOTION-20: Radix presence preserves both enter and exit animations. */
+.checkout-dialog[data-state=open]{animation:checkout-enter .22s cubic-bezier(.2,.8,.2,1) both}
+.checkout-dialog[data-state=closed]{animation:checkout-exit .16s ease-in both}
+@keyframes checkout-enter{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes checkout-exit{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.97)}}
+.checkout-dialog .success-detail,.checkout-dialog .success-customer{background:#faf9f7;border-radius:8px;padding:12px 16px;margin:0 0 10px;text-align:left;font-size:13px}
+.checkout-dialog .success-customer{gap:5px}
+.checkout-dialog .success-customer b{font-weight:600}
+.checkout-dialog .order-success>svg{color:var(--rust);background:#fff0ed;border-radius:18px}
+@media(max-width:640px){
+ .checkout-dialog[data-slot=dialog-content][data-state=open]{animation:checkout-sheet-enter .25s cubic-bezier(.2,.8,.2,1) both}
+ .checkout-dialog[data-slot=dialog-content][data-state=closed]{animation:checkout-sheet-exit .2s ease-in both}
+ @keyframes checkout-sheet-enter{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+ @keyframes checkout-sheet-exit{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(40px)}}
+}
+@media(prefers-reduced-motion:reduce){.checkout-dialog[data-slot=dialog-content][data-state]{animation:none}}
